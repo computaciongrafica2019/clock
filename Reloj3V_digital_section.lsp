@@ -1,0 +1,26 @@
+(vl-load-com)
+(defun digital_text (center / aux1 aux2 aux3);escribir texto de fecha y hora
+   (setq aux1 (+ (car center) 25) aux2 (+ (cadr center) 5) aux3 (list aux1 aux2))
+   (command "_mtext" aux3 aux3 "dia/mes/año" "")
+   (setq text_f (entlast))
+   (setq texto_fecha (vlax-ename->vla-object text_f)) ;se crea el objeto con el entityname que se guarda en una variable
+   (setq aux2 (- (cadr center) 5) aux3 (list aux1 aux2))
+   (command "_mtext" aux3 aux3 "hora:minuto:seg" "")
+   (setq text_h (entlast))
+   (setq texto_hora (vlax-ename->vla-object text_h))
+   )
+(defun regen_date (dd mm aaaa / aux1 aux2 aux3) ;dia/mes(nombre del mes)/año - funcion actualiza la fecha digital 
+   (setq aux1 (itoa dd)
+	 aux3 (itoa aaaa))
+   (setq fecha_num (strcat aux1 "/" mm "/" aux3))
+   (vlax-put-property texto_fecha 'TextString fecha_num)
+   (command "regen")
+   )
+(defun regen_hour (h minuto seg / aux1 aux2 aux3) ;hora_minuto_segundo - funcion actualiza la hora digital
+   (setq aux1 (itoa h)
+	 aux2 (itoa minuto)
+	 aux3 (itoa seg))
+   (setq hora_num (strcat aux1 ":" aux2 ":" aux3))
+   (vlax-put-property texto_hora 'TextString hora_num)
+   (command "regen")
+   )
