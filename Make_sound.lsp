@@ -5,6 +5,6 @@
   (vlax-release-object sapi)
 )
 (SpeakToMe (strcat "ik"))
-(repeat 6
+(repeat 7
   (SpeakToMe (strcat "ik"))
 )
