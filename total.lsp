@@ -1,3 +1,23 @@
+(vl-load-com)
+(Defun c:SetAlarm()
+;Alarm hand block definition
+(command "_Insert" "AlarmHand" Centre 1 1 0 "")
+(Setq AlarmM (Entlast))
+  
+(setq Ahour (getint "\nEnter the hour of the alarm: "))
+  
+(setq Aminute (getint "\nEnter the minute of the alarm: "))
+
+
+ (Setq Ang_Ala_Hour (-(+ (* Ahour Ang_HorarioXHora)(* Aminute Ang_HorarioXMinuto)(* 0  Ang_HorarioXSegundo))))
+
+ (setq propAlarmHand (entget AlarmM))
+
+ (setq propAlarmHandNew (subst (cons 50 (* PI (/ Ang_Ala_Hour 180.0))) (assoc 50 propAlarmHand) propAlarmHand))
+			(entmod propAlarmHandNew)
+
+  		  )
+;create clock
 (defun C:Edge_of_clock()
 
 ;Center point selection by screen
@@ -6,16 +26,23 @@
 	   
 ;Drawing and assignment of the analog clock
   
-(command "_Insert" "ElReloj" Center "" "" "" )
+(command "_Insert" "Clock_dwg" Center "" "" "" )
   (setq Clock (entget (entlast)))
-(command "_Insert" "ElHorario" Center "" "" "" )
+(command "_Insert" "Hour_hand_dwg" Center "" "" "" )
   (setq Hour_hand (entget (entlast)))
- (command "_Insert" "ElMinutero" Center "" "" "" )
+ (command "_Insert" "Minute_hand_dwg" Center "" "" "" )
   (setq Minute_hand (entget (entlast))) 
-(command "_Insert" "ElSegundero" Center "" "" "" )
+(command "_Insert" "Second_hand_dwg" Center "" "" "" )
   (setq Second_hand (entget (entlast)))
 
 )
+
+(Defun c:Alarm()
+
+ (if (AND (= Ahour h)(= Aminute m)(= 0 s))
+		(acet-sys-beep 64))
+  
+  )
 (defun getDate()
 ;Trougth CDATE and string manipulation set time data in variables
 (setq time_date(rtos(getvar "CDATE") 2 6))
@@ -87,3 +114,28 @@
 	)
 
 )
+(defun digital_text (center / aux1 aux2 aux3);escribir texto de fecha y hora
+   (setq aux1 (+ (car center) 25) aux2 (+ (cadr center) 5) aux3 (list aux1 aux2))
+   (command "_mtext" aux3 aux3 "dia/mes/año" "")
+   (setq text_f (entlast))
+   (setq texto_fecha (vlax-ename->vla-object text_f)) ;se crea el objeto con el entityname que se guarda en una variable
+   (setq aux2 (- (cadr center) 5) aux3 (list aux1 aux2))
+   (command "_mtext" aux3 aux3 "hora:minuto:seg" "")
+   (setq text_h (entlast))
+   (setq texto_hora (vlax-ename->vla-object text_h))
+   )
+(defun regen_date (dd mm aaaa / aux1 aux2 aux3) ;dia/mes(nombre del mes)/año - funcion actualiza la fecha digital 
+   (setq aux1 (itoa dd)
+	 aux3 (itoa aaaa))
+   (setq fecha_num (strcat aux1 "/" mm "/" aux3))
+   (vlax-put-property texto_fecha 'TextString fecha_num)
+   (command "regen")
+   )
+(defun regen_hour (h minuto seg / aux1 aux2 aux3) ;hora_minuto_segundo - funcion actualiza la hora digital
+   (setq aux1 (itoa h)
+	 aux2 (itoa minuto)
+	 aux3 (itoa seg))
+   (setq hora_num (strcat aux1 ":" aux2 ":" aux3))
+   (vlax-put-property texto_hora 'TextString hora_num)
+   (command "regen")
+   )
