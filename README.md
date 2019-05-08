@@ -1,3 +1,1 @@
-f# reloj
-Hola mundo jejej 안녕하세요 
-Commit prueba 
+Universidad Nacional de Colombia, Bogota. Computacion Grafica.  
