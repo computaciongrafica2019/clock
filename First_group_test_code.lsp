@@ -1,7 +1,5 @@
 
 
-;Function to return time data (integers)
-
 ;Trougth CDATE and string manipulation set time data in variables
 (setq time_date(rtos(getvar "CDATE") 2 6))
 (setq hours(atoi (substr fecha_hora 10 2)))
@@ -30,3 +28,15 @@
   (setq Second_hand (entget (entlast)))
 
 )
+
+
+;Sound
+
+(defun SpeakToMe (str)
+      (vl-load-com) 
+  (setq sapi (vlax-create-object "Sapi.SpVoice"))
+  (vlax-invoke sapi "Speak" str 0)
+  (vlax-release-object sapi)
+)
+
+(SpeakToMe (strcat "ik")) ;Call when we gonna move the second
