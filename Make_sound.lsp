@@ -1,0 +1,10 @@
+(defun SpeakToMe (str)
+      (vl-load-com) 
+  (setq sapi (vlax-create-object "Sapi.SpVoice"))
+  (vlax-invoke sapi "Speak" str 0)
+  (vlax-release-object sapi)
+)
+(SpeakToMe (strcat "ik"))
+(repeat 7
+  (SpeakToMe (strcat "ik"))
+)
