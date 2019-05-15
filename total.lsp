@@ -53,10 +53,7 @@
 )
 
 (defun SpeakToMe (str)
-      (vl-load-com) 
-  (setq sapi (vlax-create-object "Sapi.SpVoice"))
   (vlax-invoke sapi "Speak" str 0)
-  (vlax-release-object sapi)
 )
 
 (defun cont ()
@@ -66,7 +63,7 @@
 		(command "_delay" 9)
 	  	(setq seconds (+ seconds 1))
 	        (rotate_second_hand seconds second_hand)
-	        (speaktome seconds)
+	        (speaktome "ik")
 		(if (= seconds 60) 
 		   (progn
 		     (setq minutes(+ minutes 1))
@@ -150,6 +147,7 @@
 (c:Edge_of_clock)
 (digital_text center)
 (getdate)
+(setq sapi (vlax-create-object "Sapi.SpVoice"))
 (Change_name_month month)
 (regen_date day name_month year)
 (rotate_second_hand seconds second_hand)
@@ -157,3 +155,4 @@
 (roth hours minutes seconds hour_hand (cdr ( assoc 50 hour_hand)))
 (command  "_regen" )
 (cont)
+(vlax-release-object sapi)
