@@ -2,7 +2,7 @@
 
 ;create clock
 (defun C:Edge_of_clock()
-	;Center point selection by screen	 
+	;Center point selection by screen	Â 
 	(setq Center (getpoint))	   
 	;Drawing and assignment of the analog clock
 	(command "_Insert" "Clock_dwg" Center "" "" "" )
@@ -64,6 +64,7 @@
 	  	(setq seconds (+ seconds 1))
 	        (rotate_second_hand seconds second_hand)
 	        (speaktome "ik")
+	        (c:Alarm)
 		(if (= seconds 60) 
 		   (progn
 		     (setq minutes(+ minutes 1))
@@ -87,32 +88,28 @@
 	  	(command  "_regen" )
 	)
 )
+(Defun c:setAlarm()
+	(command "_Insert" "AlarmHand" Center 0.004 0.004 0 "")
+	(Setq AlarmM (Entlast))
+	(setq Ahour (getint "\nEnter the hour of the alarm: "))
+	(setq Aminute (getint "\nEnter the minute of the alarm: "))
+ 	(Setq Ang_Ala_Hour (+ (* Ahour (/ -360.0 12))(* Aminute (/ -360.0 12 60))))
+	(setq propAlarmHand (entget AlarmM))
+	(setq propAlarmHandNew (subst (cons 50 (* PI (/ Ang_Ala_Hour 180.0))) (assoc 50 propAlarmHand) propAlarmHand))
+	(entmod propAlarmHandNew)
+ )
+
 (Defun c:Alarm()
 
- (if (AND (= Ahour h)(= Aminute m)(= 0 s))
-		(acet-sys-beep 64)) 
-)
-(Defun c:SetAlarm()
-;Alarm hand block definition
-(command "_Insert" "AlarmHand" Centre 1 1 0 "")
-(Setq AlarmM (Entlast))
+ 	(if (AND (= Ahour hours)(= Aminute minutes)(= 0 seconds))
+		(acet-sys-beep 64))
   
-(setq Ahour (getint "\nEnter the hour of the alarm: "))
-  
-(setq Aminute (getint "\nEnter the minute of the alarm: "))
+  )
 
 
- (Setq Ang_Ala_Hour (-(+ (* Ahour Ang_HorarioXHora)(* Aminute Ang_HorarioXMinuto)(* 0  Ang_HorarioXSegundo))))
-
- (setq propAlarmHand (entget AlarmM))
-
- (setq propAlarmHandNew (subst (cons 50 (* PI (/ Ang_Ala_Hour 180.0))) (assoc 50 propAlarmHand) propAlarmHand))
-			(entmod propAlarmHandNew)
-
-  		  )
 (defun digital_text (center / aux1 aux2 aux3);escribir texto de fecha y hora
    (setq aux1 (+ (car center) 25) aux2 (+ (cadr center) 5) aux3 (list aux1 aux2))
-   (command "_mtext" aux3 aux3 "dia/mes/año" "")
+   (command "_mtext" aux3 aux3 "dia/mes/aÃ±o" "")
    (setq text_f (entlast))
    (setq texto_fecha (vlax-ename->vla-object text_f)) ;se crea el objeto con el entityname que se guarda en una variable
    (setq aux2 (- (cadr center) 5) aux3 (list aux1 aux2))
@@ -120,7 +117,7 @@
    (setq text_h (entlast))
    (setq texto_hora (vlax-ename->vla-object text_h))
    )
-(defun regen_date (dd mm aaaa / aux1 aux2 aux3) ;dia/mes(nombre del mes)/año - funcion actualiza la fecha digital 
+(defun regen_date (dd mm aaaa / aux1 aux2 aux3) ;dia/mes(nombre del mes)/aÃ±o - funcion actualiza la fecha digital 
    (setq aux1 (itoa dd)
 	 aux3 (itoa aaaa))
    (setq fecha_num (strcat aux1 "/" mm "/" aux3))
@@ -145,6 +142,7 @@
 (command "_osnap" "off")
 (command "_erase" "_all" "")
 (c:Edge_of_clock)
+(c:setAlarm)
 (digital_text center)
 (getdate)
 (setq sapi (vlax-create-object "Sapi.SpVoice"))
