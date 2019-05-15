@@ -1,5 +1,5 @@
-(defun REEMPLAZAR (Month_Number_Char)
-      (setq month_number (- (atoi Month_Number_Char) 1))
+(defun Change_Name_Month (Month_Number)
+      (setq Array_Position (- (Month_Number) 1))
       (setq Array_Month '("ENERO" "FEBRERO" "MARZO" "ABRIL" "MAYO" "JUNIO" "JULIO" "AGOSTO" "SEPTIEMBRE" "OCTUBRE" "NOVIEMBRE" "DICIEMBRE"))
-      (setq Name_Month (nth month_number Array_Month))
+      (setq Name_Month (nth Array_Position Array_Month))
    )
