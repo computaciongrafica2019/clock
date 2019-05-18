@@ -104,7 +104,7 @@
 
 (Defun c:Alarm()
 
- 	(if (AND (= Ahour hours)(= Aminute minutes)(= seconds 3 ))
+ 	(if (AND (= Ahour hours)(= Aminute minutes)(< seconds 3 ))
 		(acet-sys-beep 64))
   
   )
