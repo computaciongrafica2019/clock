@@ -52,29 +52,32 @@
   	(entmod entp)
 )
 
+;then invoke "speak" method, of the Sapi instance and runs it with an input string
 (defun SpeakToMe (str)
-  (vlax-invoke sapi "Speak" str 0)
+  (vlax-invoke sapi "Speak" str 1)
 )
 
 (defun cont ()
 	(setq contador 0)
-	(while (< contador 20)
+	(while (< contador 60)
 		(setq contador(+ contador 1))
 		(command "_delay" 9)
 	  	(setq seconds (+ seconds 1))
 	        (rotate_second_hand seconds second_hand)
-	        (speaktome "ik")
+	        ;(speaktome "ik")
 	        (c:Alarm)
 		(if (= seconds 60) 
 		   (progn
 		     (setq minutes(+ minutes 1))
 		     (rotate_minute_hand minutes seconds minute_hand)
+		     (speaktome (strcat "son las" (itoa hours) "horas y " (itoa minutes) "minutos" ))
 		     (setq seconds 0)
 		     (if (= minutes 60)
 				(progn
 					(setq hours(+ hours 1))
 				  	(roth hours minutes seconds hour_hand (cdr ( assoc 50 hour_hand)))
 				  	(setq minutes 0)
+				  	;(speaktome (strcat "son las" (itoa hours) "horas"))
 				  	(if (= hours 24) (setq hours 0)	)
 		     		)
 		     )
@@ -101,7 +104,7 @@
 
 (Defun c:Alarm()
 
- 	(if (AND (= Ahour hours)(= Aminute minutes)(= 0 seconds))
+ 	(if (AND (= Ahour hours)(= Aminute minutes)(= seconds 3 ))
 		(acet-sys-beep 64))
   
   )
@@ -145,7 +148,7 @@
 (c:setAlarm)
 (digital_text center)
 (getdate)
-(setq sapi (vlax-create-object "Sapi.SpVoice"))
+(setq sapi (vlax-create-object "Sapi.SpVoice")) ;creates an instance of the Sapi.Spvoice api from windows system
 (Change_name_month month)
 (regen_date day name_month year)
 (rotate_second_hand seconds second_hand)
@@ -153,4 +156,4 @@
 (roth hours minutes seconds hour_hand (cdr ( assoc 50 hour_hand)))
 (command  "_regen" )
 (cont)
-(vlax-release-object sapi)
+(vlax-release-object sapi) ;realises the sapi objetc 
