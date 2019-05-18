@@ -1,4 +1,4 @@
-(vl-load-com)
+﻿(vl-load-com)
 
 ;create clock
 (defun C:Edge_of_clock()
@@ -111,7 +111,7 @@
 
 
 (defun digital_text (center / aux1 aux2 aux3);escribir texto de fecha y hora
-   (setq aux1 (+ (car center) 25) aux2 (+ (cadr center) 5) aux3 (list aux1 aux2))
+   (setq aux1 (+ (car center) 30) aux2 (+ (cadr center) 10) aux3 (list aux1 aux2))
    (command "_mtext" aux3 aux3 "dia/mes/año" "")
    (setq text_f (entlast))
    (setq texto_fecha (vlax-ename->vla-object text_f)) ;se crea el objeto con el entityname que se guarda en una variable
